@@ -11,7 +11,7 @@ import requests
 import re
 import csv
 import json
-#hello
+#edit from remote!
 driver = webdriver.Chrome(executable_path="C:/Users/16104/OneDrive/Web Drivers/chromedriver.exe")
 url = 'https://www.magne.ie/collections'
 categories = []
