@@ -31,7 +31,7 @@ def stringFinder(start, end, script):
     return (str(string))
 options = Options()
 options.headless = True
-driver = webdriver.Chrome("/usr/local/bin/chromedriver", options=options)
+driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
 url = 'https://wemakegood.ie/collections/all-1'
 driver.get(url)
 driver.maximize_window()
