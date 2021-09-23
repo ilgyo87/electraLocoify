@@ -31,6 +31,7 @@ def stringFinder(start, end, script):
     return (str(string))
 options = Options()
 options.headless = True
+options.add_argument('--no-sandbox')
 driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
 url = 'https://wemakegood.ie/collections/all-1'
 driver.get(url)
