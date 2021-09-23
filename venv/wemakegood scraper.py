@@ -28,7 +28,13 @@ def stringFinder(start, end, script):
     endP = script.find(str2, startP)
     string = script[startP:endP]
     return (str(string))
-driver = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver")
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.binary_location = '/usr/bin/chromium-browser'
+driver = webdriver.Chrome(options=options, executable_path='/usr/local/bin/chromedriver')
+
 url = 'https://wemakegood.ie/collections/all-1'
 driver.get(url)
 driver.maximize_window()
