@@ -28,7 +28,7 @@ def stringFinder(start, end, script):
     endP = script.find(str2, startP)
     string = script[startP:endP]
     return (str(string))
-driver = webdriver.Chrome(executable_path="C:/Users/16104/PycharmProjects/electraLocoify/Web Drivers/chromedriver.exe")
+driver = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver")
 url = 'https://wemakegood.ie/collections/all-1'
 driver.get(url)
 driver.maximize_window()
