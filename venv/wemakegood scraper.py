@@ -29,7 +29,6 @@ def stringFinder(start, end, script):
     endP = script.find(str2, startP)
     string = script[startP:endP]
     return (str(string))
-driver = webdriver.Chrome(executable_path="C:/Users/16104/PycharmProjects/electraLocoify/Web Drivers/chromedriver.exe")
 options = Options()
 options.headless = True
 driver = webdriver.Chrome("/usr/local/bin/chromedriver", options=options)
@@ -166,7 +165,7 @@ print("total products: ", totalProducts)
 print("total products in list", totalAdded)
 # convert to excel file
 df_data = pd.DataFrame(productObjects)
-df_data.to_excel("products-wemakegood.xlsx", index=False)
+df_data.to_excel("products-wemakegoodcloud.xlsx", index=False)
 driver.close()
 driver.quit
 
