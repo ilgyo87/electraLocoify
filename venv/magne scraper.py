@@ -130,14 +130,14 @@ for cat in range(len(categories)):
         # pagination
         try:
             driver.find_element_by_class_name("next").click()
-            time.sleep(2)
+            time.sleep(1)
         except (ElementNotVisibleException, NoSuchElementException):
             driver.find_element_by_xpath('//*[@id="nav"]/div/nav[1]/ul/li[2]/a').click()
             break
 print("total products: ", totalProducts)
 print("total products in list", totalAdded)
 # convert to excel file
-df_data = pd.DataFrame(items)
+df_data = pd.DataFrame(productObjects)
 df_data.to_excel("products-magne.xlsx", index=False)
 driver.close()
 
