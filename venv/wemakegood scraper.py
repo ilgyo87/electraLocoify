@@ -1,20 +1,22 @@
+import math
+import re
+import smtplib
+import time
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+from email.message import EmailMessage
+from email.mime.application import MIMEApplication
+import io
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common.exceptions import *
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import *
-import time
-import json
-import re
-from selenium.webdriver.common.action_chains import ActionChains
-import string
-from selenium.webdriver.support.select import Select
-import math
-import requests
+from selenium.webdriver.support.ui import WebDriverWait
 
 productObjects=[]
 variants=[]
@@ -29,10 +31,12 @@ def stringFinder(start, end, script):
     endP = script.find(str2, startP)
     string = script[startP:endP]
     return (str(string))
+
 options = Options()
 options.headless = True
 options.add_argument('--no-sandbox')
-driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
+# driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
+driver = webdriver.Chrome("C:/Users/16104/PycharmProjects/electraLocoify/Web Drivers/chromedriver.exe", options=options)
 url = 'https://wemakegood.ie/collections/all-1'
 driver.get(url)
 driver.maximize_window()
@@ -52,8 +56,8 @@ while True:
         products = prodCont.find_elements_by_class_name('prod-image')
         print('{}{}'.format("total amount of products per page: ", len(products)))
         print('{}{}'.format("page number: ", i+1))
-        # for p in range(2):
-        for p in range(len(products)):
+        for p in range(2):
+        # for p in range(len(products)):
             t=p+1
             variants.clear()
             prodCont = driver.find_element_by_xpath('//*[@id="collection-page"]/div[6]')
@@ -160,13 +164,44 @@ while True:
                 time.sleep(1)
         except (ElementNotVisibleException, NoSuchElementException):
             break
-    break
+    break        
 
-print("total products: ", totalProducts)
+
+print("total products: ", prodAmount)
 print("total products in list", totalAdded)
 # convert to excel file
 df_data = pd.DataFrame(productObjects)
 df_data.to_excel("products-wemakegoodcloud.xlsx", index=False)
+
+def export_excel(df):
+  with io.BytesIO() as buffer:
+    writer = pd.ExcelWriter(buffer)
+    df.to_excel(writer)
+    writer.save()
+    return buffer.getvalue()
+
+
+SEND_FROM = 'dsuhupcs@gmail.com'
+SEND_PASS = "Danielsuh1$"
+EXPORTERS = {'products-wemakegoodcloud.xlsx': export_excel}
+
+def send_dataframe(send_to, subject, body, df):
+  multipart = MIMEMultipart()
+  multipart['From'] = SEND_FROM
+  multipart['To'] = send_to
+  multipart['Subject'] = subject
+  for filename in EXPORTERS:
+    attachment = MIMEApplication(EXPORTERS[filename](df))
+    attachment['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+    multipart.attach(attachment)
+  multipart.attach(MIMEText(body, 'html'))
+  s = smtplib.SMTP('smtp.gmail.com', 587)
+  s.starttls() #enable security
+  s.login(SEND_FROM, SEND_PASS) #login with mail_id and password
+  s.sendmail(SEND_FROM, send_to, multipart.as_string())
+  s.quit()
+send_dataframe('dsuhupcs@gmail.com',"WeMakeGood Scraper",'{}{}{}{}'.format("total products: ", prodAmount,"\ntotal products in list: ", totalAdded ), df_data)
+print('Mail Sent')
 driver.close()
 driver.quit
 
