@@ -35,8 +35,8 @@ def stringFinder(start, end, script):
 options = Options()
 options.headless = True
 options.add_argument('--no-sandbox')
-# driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
-driver = webdriver.Chrome("C:/Users/16104/PycharmProjects/electraLocoify/Web Drivers/chromedriver.exe", options=options)
+driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
+# driver = webdriver.Chrome("C:/Users/16104/PycharmProjects/electraLocoify/Web Drivers/chromedriver.exe", options=options)
 url = 'https://wemakegood.ie/collections/all-1'
 driver.get(url)
 driver.maximize_window()
@@ -56,8 +56,8 @@ while True:
         products = prodCont.find_elements_by_class_name('prod-image')
         print('{}{}'.format("total amount of products per page: ", len(products)))
         print('{}{}'.format("page number: ", i+1))
-        for p in range(2):
-        # for p in range(len(products)):
+        # for p in range(2):
+        for p in range(len(products)):
             t=p+1
             variants.clear()
             prodCont = driver.find_element_by_xpath('//*[@id="collection-page"]/div[6]')
